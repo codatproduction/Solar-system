@@ -1,0 +1,56 @@
+[gd_scene load_steps=10 format=2]
+
+[ext_resource path="res://res/meshes/liquid.mesh" type="ArrayMesh" id=1]
+[ext_resource path="res://res/terrain.shader" type="Shader" id=2]
+[ext_resource path="res://res/liquid.shader" type="Shader" id=3]
+[ext_resource path="res://src/Planet.tscn" type="PackedScene" id=4]
+[ext_resource path="res://res/meshes/earth.mesh" type="ArrayMesh" id=5]
+[ext_resource path="res://src/EarthMoon.tscn" type="PackedScene" id=6]
+
+[sub_resource type="SphereShape" id=1]
+
+[sub_resource type="ShaderMaterial" id=2]
+shader = ExtResource( 2 )
+shader_param/albedo = null
+shader_param/specular = null
+shader_param/metallic = null
+shader_param/roughness = null
+shader_param/point_size = null
+shader_param/metallic_texture_channel = null
+shader_param/roughness_texture_channel = null
+shader_param/uv1_scale = null
+shader_param/uv1_offset = null
+shader_param/uv2_scale = null
+shader_param/uv2_offset = null
+shader_param/min_val = 1.0
+shader_param/max_val = 1.05
+shader_param/low_color = Color( 0.945098, 0.980392, 0.607843, 1 )
+shader_param/high_color = Color( 0.470588, 0.788235, 0.45098, 1 )
+
+[sub_resource type="ShaderMaterial" id=3]
+shader = ExtResource( 3 )
+shader_param/beer_factor = 20.0
+shader_param/out_color = Color( 0.152941, 0.247059, 0.611765, 1 )
+shader_param/explosiveness = 0.009
+shader_param/emission_energy = 1.0
+
+[node name="Earth" instance=ExtResource( 4 )]
+planet_rotation_speed = 0.5
+moon_rotation_speed = 0.4
+
+[node name="Mass" parent="." index="0"]
+transform = Transform( 0.896208, -0.443634, 0, 0.443634, 0.896208, 0, 0, 0, 1, 0, 0, 0 )
+
+[node name="CollisionShape" parent="Mass" index="0"]
+shape = SubResource( 1 )
+
+[node name="Terrain" type="MeshInstance" parent="Mass" index="1"]
+mesh = ExtResource( 5 )
+material/0 = SubResource( 2 )
+
+[node name="Water" type="MeshInstance" parent="Mass" index="2"]
+mesh = ExtResource( 1 )
+material/0 = SubResource( 3 )
+
+[node name="EarthMoon" parent="MoonContainer" index="0" instance=ExtResource( 6 )]
+transform = Transform( 0.24, 0, 0, 0, 0.24, 0, 0, 0, 0.24, 0, 0, -1.66644 )

@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/482706__erokia__ambient-wave-45.wav-c536007311abdb785c3987873921e2b3.sample"
+
+[deps]
+
+source_file="res://res/482706__erokia__ambient-wave-45.wav"
+dest_files=[ "res://.import/482706__erokia__ambient-wave-45.wav-c536007311abdb785c3987873921e2b3.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

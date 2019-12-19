@@ -1,0 +1,70 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://res/liquid.shader" type="Shader" id=1]
+[ext_resource path="res://src/Planet.tscn" type="PackedScene" id=2]
+[ext_resource path="res://res/meshes/liquid.mesh" type="ArrayMesh" id=3]
+
+[sub_resource type="SphereShape" id=1]
+
+[sub_resource type="ShaderMaterial" id=2]
+shader = ExtResource( 1 )
+shader_param/beer_factor = 20.0
+shader_param/out_color = Color( 0.247059, 0.129412, 0.509804, 1 )
+shader_param/explosiveness = 0.007
+shader_param/emission_energy = 1.0
+
+[sub_resource type="SpatialMaterial" id=3]
+flags_transparent = true
+albedo_color = Color( 0.247059, 0.129412, 0.509804, 0.352941 )
+emission_enabled = true
+emission = Color( 0.247059, 0.129412, 0.509804, 1 )
+emission_energy = 1.0
+emission_operator = 0
+emission_on_uv2 = false
+
+[sub_resource type="SpatialMaterial" id=4]
+albedo_color = Color( 0.933333, 0.133333, 1, 1 )
+emission_enabled = true
+emission = Color( 0.933333, 0.133333, 1, 1 )
+emission_energy = 1.0
+emission_operator = 0
+emission_on_uv2 = false
+
+[node name="Saturnus" index="0" instance=ExtResource( 2 )]
+
+[node name="Mass" parent="." index="0"]
+transform = Transform( 0.937877, 0.346968, 0, -0.346968, 0.937877, 0, 0, 0, 1, 0, 0, 0 )
+
+[node name="CollisionShape" parent="Mass" index="0"]
+shape = SubResource( 1 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Mass" index="1"]
+mesh = ExtResource( 3 )
+material/0 = SubResource( 2 )
+
+[node name="CSGCylinder" type="CSGCylinder" parent="Mass" index="2"]
+transform = Transform( 1.08434, 0.626045, 0, -0.626045, 1.08434, 0, 0, 0, 1.25209, 0, 0, 0 )
+radius = 1.484
+height = 0.028
+sides = 64
+material = SubResource( 3 )
+
+[node name="CSGCylinder" type="CSGCylinder" parent="Mass/CSGCylinder" index="0"]
+operation = 2
+sides = 64
+
+[node name="CSGCylinder2" type="CSGCylinder" parent="Mass" index="3"]
+transform = Transform( 1.08434, -0.626045, 0, 0.626045, 1.08434, 0, 0, 0, 1.25209, 0, 0, 0 )
+radius = 1.484
+height = 0.028
+sides = 64
+material = SubResource( 3 )
+
+[node name="CSGCylinder" type="CSGCylinder" parent="Mass/CSGCylinder2" index="0"]
+operation = 2
+sides = 64
+
+[node name="MeshInstance2" type="MeshInstance" parent="Mass" index="4"]
+transform = Transform( 0.917583, -2.98023e-08, 0, 2.98023e-08, 0.917583, 0, 0, 0, 0.917583, 0, 0, 0 )
+mesh = ExtResource( 3 )
+material/0 = SubResource( 4 )

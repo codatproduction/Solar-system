@@ -1,0 +1,71 @@
+[gd_scene load_steps=14 format=2]
+
+[ext_resource path="res://res/hdr.png" type="Texture" id=1]
+[ext_resource path="res://src/Sun.tscn" type="PackedScene" id=2]
+[ext_resource path="res://src/Mercury.tscn" type="PackedScene" id=3]
+[ext_resource path="res://src/System.gd" type="Script" id=4]
+[ext_resource path="res://src/Venus.tscn" type="PackedScene" id=5]
+[ext_resource path="res://src/Earth.tscn" type="PackedScene" id=6]
+[ext_resource path="res://src/Player.tscn" type="PackedScene" id=7]
+[ext_resource path="res://src/IceMars.tscn" type="PackedScene" id=8]
+[ext_resource path="res://src/Saturnus.tscn" type="PackedScene" id=9]
+[ext_resource path="res://src/IcyNeptune.tscn" type="PackedScene" id=10]
+[ext_resource path="res://res/482706__erokia__ambient-wave-45.wav" type="AudioStream" id=11]
+
+[sub_resource type="PanoramaSky" id=1]
+panorama = ExtResource( 1 )
+
+[sub_resource type="Environment" id=2]
+background_mode = 2
+background_sky = SubResource( 1 )
+glow_enabled = true
+glow_blend_mode = 1
+glow_hdr_threshold = 0.82
+glow_bicubic_upscale = true
+
+[node name="System" type="Spatial"]
+script = ExtResource( 4 )
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource( 2 )
+
+[node name="Sun" parent="." instance=ExtResource( 2 )]
+
+[node name="Orbits" type="Spatial" parent="."]
+
+[node name="Orbit_0" type="Spatial" parent="Orbits"]
+
+[node name="Mercury" parent="Orbits/Orbit_0" instance=ExtResource( 3 )]
+transform = Transform( 1, 0, 0, 0, 0.999522, 0.0309223, 0, -0.0309223, 0.999522, 0, 0, 40 )
+
+[node name="Orbit_1" type="Spatial" parent="Orbits"]
+
+[node name="Venus" parent="Orbits/Orbit_1" instance=ExtResource( 5 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 60 )
+
+[node name="Orbit_2" type="Spatial" parent="Orbits"]
+
+[node name="Earth" parent="Orbits/Orbit_2" instance=ExtResource( 6 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 80 )
+
+[node name="Orbit_3" type="Spatial" parent="Orbits"]
+
+[node name="IceMars" parent="Orbits/Orbit_3" instance=ExtResource( 8 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 100 )
+
+[node name="Orbit_4" type="Spatial" parent="Orbits"]
+
+[node name="Saturnus" parent="Orbits/Orbit_4" instance=ExtResource( 9 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 120 )
+
+[node name="Orbit_5" type="Spatial" parent="Orbits"]
+
+[node name="IcyNeptune" parent="Orbits/Orbit_5" instance=ExtResource( 10 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 140 )
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 11 )
+autoplay = true
+
+[node name="Player" parent="." instance=ExtResource( 7 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 11.8713, 7.62939e-06, 13.1649 )
