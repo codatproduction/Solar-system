@@ -46,6 +46,7 @@ void fragment(){
 	
 	depth = exp(-depth * beer_factor);
 	ALPHA = clamp(1.0 - depth, 0.0, 1.0);
+	//ALPHA = 0.5;
 	
 
 }

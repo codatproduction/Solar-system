@@ -3,27 +3,27 @@ extends MeshInstance
 
 var triangles = []
 var verticies = []
-var surface_tool = null
-export (int) var subdivisions = 2
-export (bool) var apply_noise = false
-export(bool) var update_planet = null setget _update_planet
-export (float) var roughness = 1
 
-export (int) var noise_layers = 1
-export (float) var persistence = 0.5
-export (float) var init_roughness = 1
 
-var noise = OpenSimplexNoise.new()
-	
+export (int, 0, 6) var subdivisions = 2 setget set_subdivisions
+export (float) var roughness = 1 setget set_roughness
+export (float) var radius = 1.0 setget set_radius
+export (OpenSimplexNoise) var noise = null
+export (bool) var update_noise = false setget update_noise
+
+
+
 
 func _ready():
+	randomize()
 	
-	if self.mesh != null:
-		_update_planet(0)
-	else:
-		generate_icosphere()
-		subdivide_icosphere()
-		generate_mesh()
+	triangles.clear()
+	verticies.clear()
+	mesh = null
+	
+	generate_icosphere()
+	subdivide_icosphere()
+	generate_mesh()
 	
 	
 func generate_icosphere():
@@ -65,45 +65,26 @@ func generate_icosphere():
 	triangles.push_back(Triangle.new(9, 8, 1))
 	
 func generate_mesh():
-	surface_tool = SurfaceTool.new()
-	surface_tool.begin(Mesh.PRIMITIVE_TRIANGLES)
-	
-	if apply_noise:
-		randomize()
-		noise.seed = randi()
-		
+	var surface_tool = SurfaceTool.new()
+	surface_tool.begin(Mesh.PRIMITIVE_TRIANGLES)	
 	
 	for index in triangles.size():
 		var triangle = triangles[index]
 		
 		for i in triangle.verticies.size():
 			var vertex = verticies[triangle.verticies[(triangle.verticies.size() - 1) - i]]
-			if apply_noise:		
-				vertex = apply_noise(vertex)
-			
-			surface_tool.add_vertex(vertex)
+			if noise != null:
+				vertex = vertex.normalized() * ((noise.get_noise_3dv(vertex * noise.period * noise.octaves) + 1) * 0.5)
+				
+			surface_tool.add_vertex(vertex * radius)
 		
 	surface_tool.index()
 	surface_tool.generate_normals()
 	
+	var t = MeshDataTool.new()
+	t.create_from_surface(surface_tool.commit(), 0)
 	self.mesh = surface_tool.commit()
 
-func caclulate(vertex):
-	var value = 0
-	var freq = init_roughness
-	var ampl = 1
-	
-	for i in noise_layers:
-		var v = noise.get_noise_3dv(vertex * noise.period * freq)
-		value += (v + 1) * 0.5 * ampl
-		
-		freq *= roughness
-		ampl *= persistence
-	
-	return (value + 1) * 0.5
-	
-func apply_noise(vertex):
-	return vertex * caclulate(vertex)
 	
 func subdivide_icosphere():
 	
@@ -136,6 +117,7 @@ func get_mid(cache : Dictionary, a, b):
 	
 	if cache.has(key):
 		return cache.get(key)
+		pass
 	
 	var p1 = verticies[a]
 	var p2 = verticies[b]
@@ -153,11 +135,19 @@ class Triangle:
 		verticies.push_back(b)
 		verticies.push_back(c)
 		
-func _update_planet(value):
-	self.mesh = null
-	triangles.clear()
-	verticies.clear()
-	generate_icosphere()
-	subdivide_icosphere()
-	generate_mesh()
 
+func set_subdivisions(value):
+	subdivisions = value
+	_ready()
+	
+	
+func set_roughness(value):
+	roughness = value
+	_ready()
+
+func set_radius(value):
+	radius = value
+	_ready()
+
+func update_noise(value):
+	_ready()

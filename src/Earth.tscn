@@ -32,7 +32,7 @@ shader = ExtResource( 3 )
 shader_param/beer_factor = 20.0
 shader_param/out_color = Color( 0.152941, 0.247059, 0.611765, 1 )
 shader_param/explosiveness = 0.009
-shader_param/emission_energy = 1.0
+shader_param/emission_energy = 0.0
 
 [node name="Earth" instance=ExtResource( 4 )]
 planet_rotation_speed = 0.5
